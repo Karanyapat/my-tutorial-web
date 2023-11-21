@@ -1,0 +1,111 @@
+<?php include 'condb.php';
+session_start();?>
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <meta name="description" content="" />
+        <meta name="author" content="" />
+        <title>Dashboard - SB Admin</title>
+        <link href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min.css" rel="stylesheet" />
+        <link href="css/styles.css" rel="stylesheet" />
+        <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
+        <style>
+
+    .text-red {
+        animation: blinking 1s infinite;
+    }
+</style>
+    </head>
+    <body class="sb-nav-fixed">
+                    <div id="layoutSidenav_contnt">
+                        <main>
+                            <div class="container-fluid px-4 mt-4">
+                        <div class="card mb-4">
+                            <div class="card-header">
+                                <i class="fas fa-table me-1"></i>
+                               แสดงรายชื่อที่ลงทะเบียน (ชำระเงินแล้ว)
+                               
+                            </div>
+                            <div>
+                                <br>
+                                <a href="history_yes.php"><button type="button" class="btn btn-outline-success">ชำระเงินแล้ว</button></a>
+                                <a href="history.php"><button type="button" class="btn btn-outline-success">ยังไม่ชำระเงิน</button></a>
+                                <a href="history_no.php"><button type="button" class="btn btn-outline-success">ยกเลิกใบสั่งซื้อ</button></a>
+                                <a href="sh_school.php"><button type="button" class="btn btn-success">ย้อนกลับ</button></a>
+                            </div>
+                            <div class="card-body">
+                                <table id="datatablesSimple" class="table table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>เลขที่ใบสมัคร</th>
+                                            <th>ชื่อนามสกุล(นักเรียน)</th>
+                                            <th>เบอร์โทรติดต่อ</th>
+                                            <th>ความรู้พื้นฐาน</th>
+                                            <th>วันเวลาที่จะเรียน</th>
+                                            <th>ราคารวม</th>
+                                            <th>วันที่ทำการลงทะเบียน</th>
+                                            <th>สถานะการชำระเงิน</th>
+                                        </tr>
+                                    </thead>
+                                    <tfoot>
+                                        <tr>
+                                            <th>orderID</th>
+                                            <th>cus_name</th>
+                                            <th>cus_tel</th>
+                                            <th>cus_know</th>
+                                            <th>day-time</th>
+                                        </tr>
+                                    </tfoot>
+                                <?php
+                                $sql ="select * from tb_order where order_status='2' order by reg_date DESC" ;
+                                $result=mysqli_query($conn,$sql);
+                                
+                                ?>
+                                    <tbody>
+                                    <?php while($row=mysqli_fetch_array($result)){ 
+                                        $status = $row['order_status'];
+                                        ?>
+                                        <tr>
+                                            <td><?=$row['orderID']?></td>
+                                            <td><?=$row['cus_name']?></td>
+                                            <td><?=$row['cus_tel']?></td>
+                                            <td><?=$row['cus_know']?></td>
+                                            <td><?=$row['day-time']?></td>
+                                            <td><?=$row['total_price']?></td>
+                                            <td><?=$row['reg_date']?></td>
+                                            <td>
+                                                <?php
+                                                if($status == 1){
+                                                    echo "<b style='color:green'>ยังไม่ชำระเงิน</b>";
+                                                }else if($status == 2){
+                                                    echo "<b style='color:blue'>ชำระเงินแล้ว</b>";
+                                                }else if($status == 0){
+                                                    echo "<b style='color:red'>ยกเลิกการสั่งซื้อ</b>";
+                                                }
+                                                ?>
+                                        </td>
+                                    
+                                        </tr>
+                                    <?php } 
+                                    //mysqli_close($conn);
+                                    ?>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </main>
+            </div>
+        </div>
+    </body>
+</html>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+        <script src="js/scripts.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js" crossorigin="anonymous"></script>
+        <script src="assets/demo/chart-area-demo.js"></script>
+        <script src="assets/demo/chart-bar-demo.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/umd/simple-datatables.min.js" crossorigin="anonymous"></script>
+        <script src="js/datatables-simple-demo.js"></script>
